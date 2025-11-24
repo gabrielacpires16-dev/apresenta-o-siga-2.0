@@ -1,490 +1,289 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>SIGA — Protótipo (HTML único com CSS e JS embutidos)</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
-  <style>
-    :root{
-      --accent:#c62828;
-      --accent-2:#ff5252;
-      --muted:#5a2a2a;
-      --bg:#fff5f5;
-      --card:#fff;
-      --text:#071322;
-      --maxwidth:980px;
-      --radius:12px;
-    }
-    *{box-sizing:border-box}
-    body{font-family:'Poppins',Inter,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;margin:0;padding:0;background:linear-gradient(180deg,var(--bg),#edf3fb);color:var(--text);-webkit-font-smoothing:antialiased}
-    .app{max-width:var(--maxwidth);margin:20px auto;padding:18px;border-radius:16px;background:linear-gradient(180deg,var(--card),rgba(255,255,255,0.98));box-shadow:0 30px 80px rgba(11,11,11,0.06)}
-    .app-header{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:16px}
-    .app-title strong{font-size:18px;color:var(--accent)}
-    .sub{font-size:13px;color:var(--muted)}
-    .user-controls{display:flex;gap:8px;align-items:center}
-    .btn{background:linear-gradient(90deg,var(--accent),var(--accent-2));color:#fff;border:0;padding:8px 12px;border-radius:10px;cursor:pointer}
-    .btn.secondary{background:linear-gradient(90deg,#7b2c2c,#a83b3b)}
-    .muted{color:var(--muted);font-size:13px}
-    .login-overlay{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:linear-gradient(180deg,rgba(40,8,8,0.45),rgba(8,2,2,0.45));z-index:60;padding:20px}
-    .login-card{max-width:480px;width:100%;padding:22px;border-radius:14px;box-shadow:0 24px 60px rgba(198,40,40,0.12);background:linear-gradient(180deg,#fff8f8,#fff);border-left:6px solid rgba(198,40,40,0.12)}
-    .login-brand{display:flex;align-items:center;gap:12px;margin-bottom:8px}
-    .login-brand .logo{font-size:30px}
-    .login-card label{display:block;margin-top:8px;font-size:13px;color:var(--muted)}
-    .login-card input, input[type=number], select, textarea{width:100%;padding:10px;border:1px solid #e1e8f5;border-radius:10px;margin-top:6px;background:#fbfdff}
-    .actions{display:flex;gap:8px;margin-top:12px}
-    .nav{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px;margin-bottom:12px}
-    .nav button{background:transparent;color:var(--accent);border:1px solid rgba(198,40,40,0.06);padding:8px;border-radius:8px;cursor:pointer}
-    .nav button.active-tile{background:linear-gradient(90deg,var(--accent),var(--accent-2));color:#fff}
-    .section{display:none;background:var(--card);padding:18px;border-radius:12px;box-shadow:0 8px 18px rgba(198,40,40,0.03);margin-bottom:12px}
-    .section.active{display:block}
-    .list{list-style:none;padding:0;margin:0}
-    .card{background:#fff;border-radius:10px;padding:12px;box-shadow:0 6px 18px rgba(10,25,50,0.04)}
-    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px}
-    .footer{margin-top:14px;text-align:center;color:var(--muted)}
-    .horarios .horario-row{display:flex;gap:8px;margin-bottom:8px}
-    pre.wire{background:#fafafa;border-left:4px solid rgba(198,40,40,0.12);padding:12px;border-radius:8px;overflow:auto}
-    @media(max-width:900px){
-      .nav{grid-template-columns:repeat(2,1fr)}
-      .login-card{margin:0 12px}
-    }
-    /* Simple focus outline for accessibility */
-    :focus{outline:3px solid rgba(198,40,40,0.12);outline-offset:2px}
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slides: SIGA — Sistema de Gerenciamento Acadêmico</title>
+    <style>
+        :root {
+            --accent: #c62828; /* vermelho principal */
+            --accent-2: #ff5252; /* tom mais claro */
+            --muted: #5a2a2a; /* texto secundário */
+            --bg: #fff5f5; /* fundo suave rosado */
+            --card: #fff;
+            --text: #071322;
+        }
+        body {
+            font-family: 'Poppins', Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+            line-height: 1.45;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(180deg, var(--bg), #edf3fb);
+            color: var(--text);
+            -webkit-font-smoothing: antialiased;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+        .slide-container {
+            max-width: 800px;
+            width: 100%;
+            padding: 20px;
+            background: var(--card);
+            border-radius: 16px;
+            box-shadow: 0 30px 80px rgba(11,11,11,0.12);
+            margin: 20px;
+            display: none;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        .slide-container.active {
+            display: block;
+        }
+        .slide-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--accent);
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .slide-subtitle {
+            font-size: 18px;
+            color: var(--muted);
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .content {
+            font-size: 16px;
+            line-height: 1.6;
+        }
+        .content ul {
+            list-style: none;
+            padding: 0;
+        }
+        .content li {
+            margin-bottom: 10px;
+            padding-left: 20px;
+            position: relative;
+        }
+        .content li::before {
+            content: "•";
+            color: var(--accent);
+            font-weight: bold;
+            position: absolute;
+            left: 0;
+        }
+        .diagram {
+            text-align: center;
+            font-family: monospace;
+            background: #f9fbff;
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid #e1e8f5;
+            margin: 20px 0;
+        }
+        .prototype {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+        }
+        .prototype-item {
+            flex: 1;
+            min-width: 250px;
+            background: #f0f8ff;
+            padding: 15px;index.html
+            border-radius: 10px;
+            border: 1px solid #b3d9ff;
+        }
+        .prototype-item h4 {
+            color: var(--accent);
+            margin-bottom: 10px;
+        }
+        .nav-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+        }
+        button {
+            background: linear-gradient(90deg, var(--accent), var(--accent-2));
+            color: #fff;
+            border: 0;
+            padding: 10px 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: transform 0.2s;
+        }
+        button:hover {
+            transform: translateY(-3px);
+        }
+        button.secondary {
+            background: linear-gradient(90deg, #7b2c2c, #a83b3b);
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        @media (max-width: 600px) {
+            .slide-container { margin: 10px; padding: 15px; }
+            .slide-title { font-size: 24px; }
+        }
+    </style>
 </head>
 <body>
-  <!-- Login overlay -->
-  <div id="loginScreen" class="login-overlay" role="dialog" aria-modal="true">
-    <div class="login-card">
-      <div class="login-brand">
-        <div class="logo">📕</div>
-        <div class="title">SIGA — Acesso</div>
-      </div>
-      <strong>Entrar</strong>
-      <div class="small muted">Use: usuário <code>aluno</code> ou <code>aluno123</code> / senha <code>123</code> (aluno) ou usuário <code>professor</code> / senha <code>123</code> (professor)</div>
-      <form id="loginForm" class="login-form" novalidate>
-        <label for="loginUser">Usuário</label>
-        <input id="loginUser" type="text" required placeholder="Seu usuário" />
-        <label for="loginPass">Senha</label>
-        <input id="loginPass" type="password" required placeholder="Senha" />
-        <div class="actions">
-          <button type="submit" class="btn">Entrar</button>
-          <button type="button" id="demoCredentials" class="btn secondary">Credenciais de demo</button>
+    <div id="slide1" class="slide-container active">
+        <h1 class="slide-title">SIGA: Sistema de Gerenciamento Acadêmico</h1>
+        <h2 class="slide-subtitle">Um sistema web interativo para alunos e professores da FATEC</h2>
+        <div class="content">
+            <ul>
+                <li><strong>Descrição do Trabalho:</strong> O SIGA é um sistema acadêmico mockado desenvolvido em HTML, CSS e JavaScript puro, simulando um portal de gestão escolar. Ele permite login diferenciado para alunos e professores, com navegação responsiva e armazenamento local (localStorage) para dados como notas, faltas e turmas.</li>
+                <li><strong>Tecnologias Utilizadas:</strong> HTML5, CSS3 (com variáveis CSS para temas claro/escuro), JavaScript (ES6+), sem frameworks externos para manter simplicidade.</li>
+                <li><strong>Propósito:</strong> Facilitar o acesso a informações acadêmicas, como notas, horários e solicitações, promovendo uma experiência intuitiva e acessível. Inclui funcionalidades de professor para gestão de alunos, turmas e avaliações.</li>
+                <li><strong>Público-Alvo:</strong> Alunos e professores de instituições como a FATEC, com foco em usabilidade e responsividade (adaptável a dispositivos móveis).</li>
+            </ul>
         </div>
-      </form>
+        <div class="nav-buttons">
+            <button class="secondary" onclick="prevSlide()">Anterior</button>
+            <button onclick="nextSlide()">Próximo</button>
+        </div>
     </div>
-  </div>
 
-  <!-- Main app -->
-  <div id="main" class="app" aria-hidden="true" style="display:none">
-    <header class="app-header">
-      <div class="app-title"><strong>SIGA</strong><div class="sub">Gerenciador Acadêmico — Protótipo</div></div>
-      <div class="user-controls">
-        <span id="loggedUser" class="small muted" style="display:none"></span>
-        <button id="themeToggleBtn" class="btn secondary" title="Alternar tema">🌙</button>
-        <button id="logoutBtnTop" class="btn secondary">Sair</button>
-      </div>
-    </header>
+    <div id="slide2" class="slide-container">
+        <h1 class="slide-title">Funcionalidades do SIGA</h1>
+        <h2 class="slide-subtitle">Recursos para Alunos e Professores</h2>
+        <div class="content">
+            <h3>Para Alunos:</h3>
+            <ul>
+                <li><strong>Home e Novidades:</strong> Dashboard inicial com boas-vindas e feed de notícias/eventos da FATEC (ex.: períodos de inscrição, eventos acadêmicos).</li>
+                <li><strong>Notas, Faltas e Horário:</strong> Visualização de desempenho acadêmico, frequência e cronograma semanal.</li>
+                <li><strong>Disciplinas, Histórico e Documentos:</strong> Acesso a ementas, histórico escolar e downloads de documentos (ex.: atestados).</li>
+                <li><strong>Solicitações:</strong> Revisão de notas/faltas, rematrícula, solicitação de Atividades Especiais (AE), Regime Domiciliar e Atividades Complementares (AC).</li>
+                <li><strong>Perfil:</strong> Informações pessoais (nome, RA, curso, PP/PR/PPI).</li>
+            </ul>
+            <h3>Para Professores:</h3>
+            <ul>
+                <li><strong>Turmas e Cadastro:</strong> Gerenciamento de turmas, alunos e horários; criação de novas turmas.</li>
+                <li><strong>Faltas e Chamada:</strong> Registro de justificativas de faltas e realização de listas de presença por disciplina.</li>
+                <li><strong>Lançamento de Notas:</strong> Postagem de notas com métricas detalhadas (ex.: testes, trabalhos, participação), incluindo descrições e observações.</li>
+                <li><strong>Solicitações:</strong> Revisão e aprovação/rejeição de pedidos de alunos (ex.: AE, AC).</li>
+                <li><strong>Perfil:</strong> Estatísticas pessoais (total de turmas e alunos gerenciados).</li>
+            </ul>
+            <p><strong>Recursos Gerais:</strong> Tema claro/escuro, login seguro (credenciais demo: aluno/professor com senha "123"), armazenamento local para persistência de dados.</p>
+        </div>
+        <div class="nav-buttons">
+            <button class="secondary" onclick="prevSlide()">Anterior</button>
+            <button onclick="nextSlide()">Próximo</button>
+        </div>
+    </div>
 
-    <nav id="studentNav" class="nav" aria-label="Navegação aluno">
-      <button data-view="home">🏠 Home</button>
-      <button data-view="novidades">📢 Novidades</button>
-      <button data-view="notas">📝 Notas</button>
-      <button data-view="faltas">📊 Faltas</button>
-      <button data-view="horario">⏰ Horário</button>
-      <button data-view="disciplinas">📚 Disciplinas</button>
-      <button data-view="historico">📜 Histórico</button>
-      <button data-view="documentos">📂 Documentos</button>
-      <button data-view="etapas">🗂️ Etapas</button>
-      <button data-view="revisao">✉️ Revisão</button>
-      <button data-view="rematricula">🔁 Rematrícula</button>
-      <button data-view="solicitar-ae">📝 Solicitar AE</button>
-      <button data-view="regime-domiciliar">🏡 Regime</button>
-      <button data-view="solicitar-ac">⭐ Solicitar AC</button>
-      <button data-view="perfil">👤 Perfil</button>
-    </nav>
-
-    <nav id="professorNav" class="nav" aria-label="Navegação professor" style="display:none">
-      <button data-view="turmas">👥 Turmas</button>
-      <button data-view="cadastro-turmas">🆕 Nova Turma</button>
-      <button data-view="faltas-justificativa">📋 Faltas</button>
-      <button data-view="lista-chamada">📋 Chamada</button>
-      <button data-view="cadastro-alunos">➕ Cadastro</button>
-      <button data-view="lancar-notas">📝 Lançar Notas</button>
-      <button data-view="notas-lancadas">📊 Notas</button>
-      <button data-view="solicitacoes">📬 Solicitações</button>
-      <button data-view="perfil-professor">👤 Perfil</button>
-    </nav>
-
-    <main id="content">
-      <!-- Sections -->
-      <section id="home" class="section active">
-        <h2>Bem-vindo ao SIGA</h2>
-        <p>Clique nas opções para navegar.</p>
-      </section>
-
-      <section id="novidades" class="section">
-        <h2>📢 Novidades</h2>
-        <div id="novidades-container"></div>
-      </section>
-
-      <section id="notas" class="section">
-        <h2>Notas</h2>
-        <ul id="notas-list" class="list"></ul>
-      </section>
-
-      <section id="faltas" class="section">
-        <h2>Faltas</h2>
-        <ul id="faltas-list" class="list"></ul>
-      </section>
-
-      <section id="horario" class="section">
-        <h2>Horário</h2>
-        <ul id="horario-list" class="list"></ul>
-      </section>
-
-      <section id="disciplinas" class="section">
-        <h2>Disciplinas</h2>
-        <ul id="disciplinas-list" class="list"></ul>
-      </section>
-
-      <section id="historico" class="section">
-        <h2>Histórico</h2>
-        <ul id="historico-list" class="list"></ul>
-      </section>
-
-      <section id="documentos" class="section">
-        <h2>Documentos</h2>
-        <ul id="documentos-list" class="list"></ul>
-      </section>
-
-      <!-- Professor-only sections -->
-      <section id="turmas" class="section" style="display:none">
-        <h2>👥 Minhas Turmas</h2>
-        <div id="turmasContainer" class="grid"></div>
-      </section>
-
-      <section id="cadastro-turmas" class="section" style="display:none">
-        <h2>🆕 Cadastrar Nova Turma</h2>
-        <div class="card">
-          <label>Nome da Turma</label>
-          <input id="newTurmaName" type="text" />
-          <label>Disciplina</label>
-          <input id="newTurmaDisciplina" type="text" />
-          <label>Semestre</label>
-          <input id="newTurmaSemestre" type="number" />
-          <div id="horariosContainer" class="horarios">
-            <div class="horario-row">
-              <input class="horarioDay" placeholder="Dia (ex: Segunda)" />
-              <input class="horarioTime" placeholder="Horário (ex: 08:00-10:00)" />
-              <input class="horarioSala" placeholder="Sala" />
+    <div id="slide3" class="slide-container">
+        <h1 class="slide-title">Diagrama de Uso do SIGA</h1>
+        <h2 class="slide-subtitle">Interações entre Alunos, Professores e o Sistema</h2>
+        <div class="content">
+            <p>Este diagrama simplificado ilustra os principais casos de uso (use cases) do SIGA. Os atores são "Aluno" e "Professor". O sistema (SIGA) facilita ações como consulta de dados e gestão.</p>
+            <div class="diagram">
+                <svg width="600" height="300" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Atores -->
+                    <rect x="50" y="50" width="100" height="60" fill="#e1e8f5" stroke="#071322" stroke-width="2"/>
+                    <text x="100" y="85" text-anchor="middle" font-size="14">Aluno</text>
+                    <rect x="450" y="50" width="100" height="60" fill="#ffe6e6" stroke="#071322" stroke-width="2"/>
+                    <text x="500" y="85" text-anchor="middle" font-size="14">Professor</text>
+                    <!-- Sistema -->
+                    <rect x="200" y="150" width="200" height="100" fill="#fff" stroke="#c62828" stroke-width="3"/>
+                    <text x="300" y="175" text-anchor="middle" font-size="16" font-weight="bold">SIGA System</text>
+                    <text x="300" y="195" text-anchor="middle" font-size="12">Use Cases:</text>
+                    <text x="300" y="210" text-anchor="middle" font-size="10">- Login (comum)</text>
+                    <text x="300" y="225" text-anchor="middle" font-size="10">- Consultar Novidades (aluno)</text>
+                    <text x="300" y="240" text-anchor="middle" font-size="10">- Lançar Notas (professor)</text>
+                    <!-- Linhas de associação -->
+                    <line x1="100" y1="110" x2="250" y2="150" stroke="#071322" stroke-width="2" marker-end="url(#arrow)"/>
+                    <line x1="500" y1="110" x2="350" y2="150" stroke="#071322" stroke-width="2" marker-end="url(#arrow)"/>
+                    <defs>
+                        <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+                            <path d="M0,0 L0,6 L9,3 z" fill="#071322"/>
+                        </marker>
+                    </defs>
+                </svg>
+                <p><em>ASCII Art Alternativo:</em></p>
+                <pre>
++-------------------+     +-------------------+
+|      Aluno        |     |    Professor      |
++-------------------+     +-------------------+
+| - Visualizar      |     | - Gerenciar       |
+|   notas/faltas    |     |   turmas/alunos   |
++-------------------+     +-------------------+
+          |                           |
+          v                           v
++---------------------------------------------+
+|                SIGA System                  |
++---------------------------------------------+
+| Use Cases:                                  |
+| - Login (comum)                             |
+| - Consultar Novidades (aluno)               |
+| - Lançar Notas (professor)                  |
++---------------------------------------------+
+                </pre>
             </div>
-          </div>
-          <div class="actions">
-            <button id="addHorarioBtn" class="btn">+ Adicionar Horário</button>
-            <button id="createTurmaBtn" class="btn">Criar Turma</button>
-          </div>
         </div>
-      </section>
-
-      <section id="cadastro-alunos" class="section" style="display:none">
-        <h2>➕ Cadastrar Novo Aluno</h2>
-        <div class="card">
-          <label>Nome</label><input id="newStudentName" type="text"/>
-          <label>RA</label><input id="newStudentRA" type="text"/>
-          <label>Curso</label><input id="newStudentCourse" type="text"/>
-          <label>Semestre</label><input id="newStudentSemester" type="number"/>
-          <div class="actions">
-            <button id="addStudentBtn" class="btn">Cadastrar Aluno</button>
-          </div>
-          <div id="studentListPreview" class="muted"></div>
+        <div class="nav-buttons">
+            <button class="secondary" onclick="prevSlide()">Anterior</button>
+            <button onclick="nextSlide()">Próximo</button>
         </div>
-      </section>
+    </div>
 
-      <section id="lancar-notas" class="section" style="display:none">
-        <h2>📝 Lançar Notas</h2>
-        <div class="card">
-          <label>Aluno</label><select id="selectStudentForGrade"></select>
-          <label>Disciplina</label><select id="profDisciplina"></select>
-          <label>Nota</label><input id="profNota" type="number" step="0.01"/>
-          <div class="actions"><button id="postGradeBtn" class="btn">Postar</button></div>
+    <div id="slide4" class="slide-container">
+        <h1 class="slide-title">Protótipo das Telas do SIGA</h1>
+        <h2 class="slide-subtitle">Interfaces Principais para Alunos e Professores</h2>
+        <div class="content">
+            <p>Estes protótipos são baseados no código fornecido. Use descrições para wireframes; substitua por screenshots reais do HTML em execução.</p>
+            <div class="prototype">
+                <div class="prototype-item">
+                    <h4>Tela de Login (Overlay Inicial)</h4>
+                    <p>Fundo gradiente rosado com card central vermelho. Campos: Usuário, Senha. Botões: "Entrar" e "Credenciais de Demo". Logo: 📕 SIGA — Acesso.</p>
+                    <p><em>Wireframe:</em> [Placeholder: Card branco com borda esquerda vermelha, inputs arredondados, botões gradientes.]</p>
+                </div>
+                <div class="prototype-item">
+                    <h4>Dashboard do Aluno (Home/Novidades)</h4>
+                    <p>Header com nav em grid (🏠 Home, 📢 Novidades). Seção: Lista de cards com ícones, títulos e datas.</p>
+                    <p><em>Wireframe:</em> [Placeholder: Layout responsivo com tiles e cards com sombras.]</p>
+                </div>
+                <div class="prototype-item">
+                    <h4>Dashboard do Professor (Turmas/Lançar Notas)</h4>
+                    <p>Nav para 👥 Turmas. Seção: Grid de cards de turmas. Formulário para lançar notas com selects e campos de métricas.</p>
+                    <p><em>Wireframe:</em> [Placeholder: Formulários com labels, selects e botões "Postar".]</p>
+                </div>
+            </div>
         </div>
-      </section>
-
-      <section id="notas-lancadas" class="section" style="display:none">
-        <h2>📊 Notas Lançadas</h2>
-        <ul id="gradesListDisplay" class="list"></ul>
-      </section>
-
-      <section id="lista-chamada" class="section" style="display:none">
-        <h2>📋 Lista de Chamada</h2>
-        <div class="card">
-          <label>Disciplina</label><select id="selectDisciplinaFalta"></select>
-          <label>Dia</label><select id="selectDiaSemana"></select>
-          <label>Data</label><input id="selectDataChamada" type="date"/>
-          <div class="actions">
-            <button id="marcarTodosPresenteBtn" class="btn">✓ Todos Presentes</button>
-            <button id="marcarTodosFaltaBtn" class="btn secondary">✗ Todos Falta</button>
-            <button id="salvarChamadaBtn" class="btn">💾 Salvar Chamada</button>
-          </div>
-          <div id="alunosChamadaContainer" style="display:none">
-            <ul id="alunosChamadaList" class="list"></ul>
-          </div>
+        <div class="nav-buttons">
+            <button class="secondary" onclick="prevSlide()">Anterior</button>
+            <button onclick="nextSlide()">Próximo</button>
         </div>
-      </section>
+    </div>
 
-      <section id="perfil" class="section">
-        <h2>Perfil</h2>
-        <ul id="perfil-list" class="list"></ul>
-      </section>
+    <script>
+        let currentSlide = 1;
+        const totalSlides = 4;
 
-    </main>
+        function showSlide(slideNum) {
+            document.querySelectorAll('.slide-container').forEach(slide => slide.classList.remove('active'));
+            document.getElementById(`slide${slideNum}`).classList.add('active');
+        }
 
-    <footer class="footer muted">Protótipo SIGA — rodando localmente</footer>
-  </div>
+        function nextSlide() {
+            if (currentSlide < totalSlides) {
+                currentSlide++;
+                showSlide(currentSlide);
+            }
+        }
 
-  <script>
-  // SIGA protótipo - embutido JS
-  (function(){
-    'use strict';
-
-    // Mock initial data
-    const notas = [{ disciplina: 'Algoritmos', notaParcial: 8.5, notaFinal: 9.0, media: 8.75, status: 'Aprovado' }];
-    const faltas = [{ disciplina: 'Algoritmos', totalAulas: 40, ausencias: 5, percentual: 87.5 }];
-    const horario = [{ dia: 'Segunda', horario: '08:00-10:00', disciplina: 'Algoritmos', professor: 'Prof. João', sala: '101' }];
-    const disciplinasMock = [{ nome: 'Algoritmos', ementa: 'Introdução a algoritmos', professor: 'Prof. João', cargaHoraria: 60, situacao: 'Ativo' }];
-    const documentosMock = [{ nome: 'Atestado Médico', url: '#' }];
-    const perfilMock = { nome: 'Gabriela Silva', ra: '123456', curso: 'Ciência da Computação', semestre: 4, unidade: 'Campus São Paulo' };
-
-    // Storage keys
-    const STUDENTS_KEY = 'siga_students_v1';
-    const TURMAS_KEY = 'siga_turmas_v1';
-
-    // State
-    let students = [];
-    let turmas = [];
-
-    // Helpers
-    const $ = id => document.getElementById(id);
-    const qAll = sel => Array.from(document.querySelectorAll(sel));
-
-    // Load/save
-    function saveStudents(){ try{ localStorage.setItem(STUDENTS_KEY, JSON.stringify(students)) }catch(e){} }
-    function loadStudents(){ try{ const raw = localStorage.getItem(STUDENTS_KEY); students = raw ? JSON.parse(raw) : sampleStudents(); if(!raw) saveStudents(); }catch(e){ students = sampleStudents(); saveStudents(); } }
-    function loadTurmas(){ try{ const raw = localStorage.getItem(TURMAS_KEY); turmas = raw ? JSON.parse(raw) : sampleTurmas(); if(!raw) localStorage.setItem(TURMAS_KEY, JSON.stringify(turmas)); }catch(e){ localStorage.setItem(TURMAS_KEY, JSON.stringify(sampleTurmas())); turmas = sampleTurmas(); } }
-
-    function sampleStudents(){
-      return [
-        {id:'s1', nome:'Gabriela Silva', ra:'123456', curso: perfilMock.curso, semestre: perfilMock.semestre, notas: [], frequencia: []},
-        {id:'s2', nome:'João Pereira', ra:'987654', curso:'Análise e Desenvolvimento', semestre:2, notas: [], frequencia: []}
-      ];
-    }
-    function sampleTurmas(){
-      return [
-        {id:'t1', nome:'Algoritmos - Turma A', disciplina:'Algoritmos', semestre:4, horarios:[{dia:'Segunda', horario:'08:00-10:00', sala:'101'}], alunosIds:['s1','s2']}
-      ];
-    }
-
-    // Render functions
-    function renderNovidades(){
-      const container = $('novidades-container');
-      if(!container) return;
-      const novidades = [
-        { titulo:'Semana de Tecnologia - FATEC', data: '2025-11-24', descricao:'Palestras e workshops', icone:'🎤' },
-        { titulo:'Pré-Inscrição Optativas', data:'2025-11-20', descricao:'Inscrições até 25/11', icone:'📚' }
-      ];
-      container.innerHTML = novidades.map(n => `<div class="card"><strong style="color:var(--accent)">${n.icone} ${n.titulo}</strong><div class="muted">${new Date(n.data).toLocaleDateString('pt-BR')}</div><p>${n.descricao}</p></div>`).join('');
-    }
-
-    function loadData(sectionId){
-      if(sectionId === 'notas'){ const list = $('notas-list'); list.innerHTML = notas.map(i=>`<li class="card"><strong>${i.disciplina}</strong><div class="muted">Média: ${i.media}</div></li>`).join('') }
-      if(sectionId === 'faltas'){ const list = $('faltas-list'); list.innerHTML = faltas.map(i=>`<li class="card"><strong>${i.disciplina}</strong><div class="muted">Ausências: ${i.ausencias} • Presença ${i.percentual}%</div></li>`).join('') }
-      if(sectionId === 'horario'){ const list = $('horario-list'); list.innerHTML = horario.map(i=>`<li class="card"><strong>${i.disciplina}</strong><div class="muted">${i.dia} • ${i.horario} • ${i.professor}</div></li>`).join('') }
-      if(sectionId === 'disciplinas'){ const list = $('disciplinas-list'); list.innerHTML = disciplinasMock.map(d=>`<li class="card"><strong>${d.nome}</strong><div class="muted">${d.ementa} • ${d.professor}</div></li>`).join('') }
-      if(sectionId === 'historico'){ const list = $('historico-list'); list.innerHTML = `<li class="card"><strong>Algoritmos</strong> — Nota 9.0 • Aprovado</li>` }
-      if(sectionId === 'documentos'){ const list = $('documentos-list'); list.innerHTML = documentosMock.map(d=>`<li class="card"><a href="${d.url}" download>${d.nome}</a></li>`).join('') }
-      if(sectionId === 'perfil'){ const list = $('perfil-list'); list.innerHTML = `<li class="card"><strong>Nome:</strong> ${perfilMock.nome}</li><li class="card"><strong>RA:</strong> ${perfilMock.ra}</li><li class="card"><strong>Curso:</strong> ${perfilMock.curso}</li>` }
-      if(sectionId === 'novidades'){ renderNovidades() }
-      if(sectionId === 'turmas'){ renderTurmas() }
-      if(sectionId === 'notas-lancadas'){ renderGrades() }
-    }
-
-    // Navigation
-    function showSection(sectionId){
-      qAll('.section').forEach(s=>{ s.classList.remove('active'); s.style.display='none' })
-      const el = $(sectionId)
-      if(el){ el.classList.add('active'); el.style.display='block' }
-      qAll('.nav button').forEach(b => b.classList.toggle('active-tile', b.dataset.view === sectionId))
-      loadData(sectionId)
-    }
-
-    // Render turmas
-    function renderTurmas(){
-      const container = $('turmasContainer')
-      if(!container) return
-      container.innerHTML = turmas.map(t => {
-        const alunos = students.filter(s => t.alunosIds.includes(s.id)).length
-        return `<div class="card" onclick="alert('Detalhes: ${t.nome}\\nDisciplina: ${t.disciplina}\\nAlunos: ${alunos}')"><strong>${t.nome}</strong><div class="muted">${t.disciplina} • ${alunos} alunos</div></div>`
-      }).join('')
-    }
-
-    // Students / grades
-    function populateProfessorSelect(){
-      const sel = $('selectStudentForGrade'); if(!sel) return
-      sel.innerHTML = ''
-      students.forEach(s => { const o = document.createElement('option'); o.value = s.id; o.textContent = `${s.nome} — ${s.ra}`; sel.appendChild(o) })
-    }
-    function updateStudentListPreview(){ const p = $('studentListPreview'); if(!p) return; p.textContent = students.length ? `✓ ${students.length} aluno(s): ${students.map(s=>s.nome).join(', ')}` : '' }
-
-    function addNewStudent(){
-      const nome = $('newStudentName').value.trim()
-      const ra = $('newStudentRA').value.trim()
-      const curso = $('newStudentCourse').value.trim()
-      const semestre = Number($('newStudentSemester').value)
-      if(!nome||!ra||!curso||!semestre){ alert('Preencha todos os campos'); return }
-      if(students.some(s=>s.ra===ra)){ alert('RA já cadastrado'); return }
-      const newId = 's' + (parseInt(students[students.length-1]?.id?.substring(1) || 0) + 1)
-      const st = { id: newId, nome, ra, curso, semestre, notas: [], frequencia: [] }
-      students.push(st); saveStudents(); updateStudentListPreview(); populateProfessorSelect()
-      $('newStudentName').value=''; $('newStudentRA').value=''; $('newStudentCourse').value=''; $('newStudentSemester').value=''
-      alert(`Aluno ${nome} cadastrado`)
-    }
-
-    function createNewTurma(){
-      const nome = $('newTurmaName').value.trim()
-      const disciplina = $('newTurmaDisciplina').value.trim()
-      const semestre = Number($('newTurmaSemestre').value)
-      if(!nome||!disciplina||!semestre){ alert('Preencha os campos'); return }
-      const horarios = []
-      qAll('#horariosContainer .horario-row').forEach(row => {
-        const dia = row.querySelector('.horarioDay').value.trim()
-        const horarioVal = row.querySelector('.horarioTime').value.trim()
-        const sala = row.querySelector('.horarioSala').value.trim()
-        if(dia && horarioVal && sala) horarios.push({ dia, horario: horarioVal, sala })
-      })
-      if(horarios.length===0){ alert('Adicione pelo menos um horário'); return }
-      const newId = 't' + (parseInt(turmas[turmas.length-1]?.id?.substring(1) || 0) + 1)
-      const t = { id:newId, nome, disciplina, semestre, horarios, alunosIds: [] }
-      turmas.push(t); localStorage.setItem(TURMAS_KEY, JSON.stringify(turmas)); renderTurmas(); alert(`Turma ${nome} criada`)
-      $('newTurmaName').value=''; $('newTurmaDisciplina').value=''; $('newTurmaSemestre').value=''
-    }
-
-    // Grades
-    function postGradeFromProfessor(){
-      const sid = $('selectStudentForGrade').value
-      const disc = $('profDisciplina').value.trim()
-      const nota = $('profNota').value ? Number($('profNota').value) : null
-      if(!sid || !disc){ alert('Selecione aluno e disciplina'); return }
-      const s = students.find(x=>x.id===sid)
-      if(!s) { alert('Aluno não encontrado'); return }
-      const entry = { disciplina: disc, nota, professor: JSON.parse(localStorage.getItem('siga_user')||'{}').username || 'professor', ts: new Date().toISOString() }
-      s.notas = s.notas || []; s.notas.push(entry); saveStudents(); alert('Lançamento realizado'); renderGrades()
-    }
-
-    function renderGrades(){
-      const ul = $('gradesListDisplay'); if(!ul) return
-      const all = []
-      students.forEach(s => (s.notas || []).forEach(n => all.push({...n, studentName: s.nome, studentRa: s.ra, studentId: s.id})))
-      if(all.length===0){ ul.innerHTML = '<li class="muted">Nenhuma nota lançada</li>'; return }
-      ul.innerHTML = all.map(g => `<li class="card"><strong>${g.studentName} (${g.studentRa})</strong><div class="muted">${g.disciplina} • Nota: ${g.nota!==null?g.nota:'—'}</div></li>`).join('')
-    }
-
-    // Call / Chamada
-    function loadAlunosForDisciplina(){
-      const disc = $('selectDisciplinaFalta').value
-      const container = $('alunosChamadaContainer'); const list = $('alunosChamadaList')
-      if(!disc){ container.style.display='none'; return }
-      const alunos = []
-      turmas.forEach(t => { if(t.disciplina===disc) t.alunosIds.forEach(a => alunos.push(a)) })
-      const arr = Array.from(new Set(alunos)).map(id => students.find(s=>s.id===id)).filter(Boolean)
-      if(arr.length===0){ list.innerHTML = '<li class="muted">Nenhum aluno cadastrado nesta disciplina</li>'; container.style.display='none'; return }
-      list.innerHTML = arr.map(a => `<li style="display:flex;gap:10px;align-items:center"><input type="checkbox" class="chamadaCheckbox" data-aluno-id="${a.id}" checked/><span>${a.nome} (${a.ra})</span></li>`).join('')
-      container.style.display='block'
-    }
-    function marcarTodosPresenteOuFalta(presente){ qAll('.chamadaCheckbox').forEach(cb=>{ cb.checked = presente }) }
-    function salvarChamada(){
-      const disciplina = $('selectDisciplinaFalta').value
-      const diaSemana = $('selectDiaSemana').value
-      const dataChamada = $('selectDataChamada').value
-      if(!disciplina||!diaSemana||!dataChamada){ alert('Preencha disciplina, dia e data'); return }
-      const checkboxes = qAll('.chamadaCheckbox')
-      const chamada = { disciplina, diaSemana, data: dataChamada, alunos: checkboxes.map(cb => ({ alunoId: cb.dataset.alunoId, presente: cb.checked })), ts: new Date().toISOString() }
-      const key = 'siga_chamadas_v1'
-      const chamadas = JSON.parse(localStorage.getItem(key) || '[]'); chamadas.push(chamada); localStorage.setItem(key, JSON.stringify(chamadas))
-      alert('Chamada salva')
-    }
-
-    // Login
-    function login(){
-      const username = $('loginUser').value.trim()
-      const password = $('loginPass').value
-      const isAluno = (username === 'aluno' || username === 'aluno123')
-      const isProfessor = (username === 'professor')
-      if((isAluno||isProfessor) && password === '123'){
-        const role = isAluno ? 'student' : 'professor'
-        localStorage.setItem('siga_user', JSON.stringify({ username: isAluno ? 'aluno' : 'professor', role }))
-        $('loginScreen').style.display='none'
-        $('main').style.display='block'
-        $('main').setAttribute('aria-hidden','false')
-        const logged = $('loggedUser'); logged.textContent = username; logged.style.display='inline-block'
-        if(role === 'professor'){ $('studentNav').style.display='none'; $('professorNav').style.display='grid'; document.body.classList.add('professor-mode') } else { $('studentNav').style.display='grid'; $('professorNav').style.display='none'; document.body.classList.remove('professor-mode') }
-        populateProfessorSelect(); renderTurmas(); renderNovidades(); loadData('home')
-      } else {
-        alert('Credenciais inválidas. Use aluno/aluno123 / 123 ou professor / 123')
-      }
-    }
-
-    // Theme
-    function applyThemeFromStorage(){ try{ const t = localStorage.getItem('siga_theme_v1') || 'light'; if(t === 'dark') document.body.classList.add('dark-mode'); else document.body.classList.remove('dark-mode'); }catch(e){} }
-    function toggleTheme(){ const isDark = document.body.classList.toggle('dark-mode'); try{ localStorage.setItem('siga_theme_v1', isDark ? 'dark' : 'light') }catch(e){} }
-
-    // Init UI wiring
-    document.addEventListener('DOMContentLoaded', () => {
-      // load data
-      loadStudents(); loadTurmas(); applyThemeFromStorage()
-      // login form
-      const lf = $('loginForm'); if(lf) lf.addEventListener('submit', (e)=>{ e.preventDefault(); login() })
-      const demoBtn = $('demoCredentials'); if(demoBtn) demoBtn.addEventListener('click', ()=>{ $('loginUser').value='aluno'; $('loginPass').value='123'; $('loginUser').focus() })
-      // theme
-      const themeBtn = $('themeToggleBtn'); if(themeBtn) themeBtn.addEventListener('click', toggleTheme)
-      // nav buttons
-      qAll('.nav button').forEach(b => b.addEventListener('click', () => showSection(b.dataset.view)))
-      // add student
-      const addStudentBtn = $('addStudentBtn'); if(addStudentBtn) addStudentBtn.addEventListener('click', addNewStudent)
-      // create turma: addHorario then create
-      const addHorarioBtn = $('addHorarioBtn')
-      if(addHorarioBtn) addHorarioBtn.addEventListener('click', ()=> {
-        const container = $('horariosContainer')
-        const newRow = document.createElement('div'); newRow.className = 'horario-row'
-        newRow.innerHTML = `<input class="horarioDay" placeholder="Dia (ex: Segunda)" /><input class="horarioTime" placeholder="Horário (ex: 14:00-16:00)"/><input class="horarioSala" placeholder="Sala" />`
-        container.appendChild(newRow)
-      })
-      const createTurmaBtn = $('createTurmaBtn'); if(createTurmaBtn) createTurmaBtn.addEventListener('click', createNewTurma)
-      // launch grade
-      const postGradeBtn = $('postGradeBtn'); if(postGradeBtn) postGradeBtn.addEventListener('click', postGradeFromProfessor)
-      // chamada
-      const selectDisc = $('selectDisciplinaFalta'); if(selectDisc) selectDisc.addEventListener('change', loadAlunosForDisciplina)
-      const marcarTodosPresenteBtn = $('marcarTodosPresenteBtn'); if(marcarTodosPresenteBtn) marcarTodosPresenteBtn.addEventListener('click', ()=>marcarTodosPresenteOuFalta(true))
-      const marcarTodosFaltaBtn = $('marcarTodosFaltaBtn'); if(marcarTodosFaltaBtn) marcarTodosFaltaBtn.addEventListener('click', ()=>marcarTodosPresenteOuFalta(false))
-      const salvarChamadaBtn = $('salvarChamadaBtn'); if(salvarChamadaBtn) salvarChamadaBtn.addEventListener('click', salvarChamada)
-
-      // populate selects and UI
-      populateProfessorSelect(); updateStudentListPreview(); renderTurmas(); renderNovidades()
-      // check persisted user
-      try{
-        const raw = localStorage.getItem('siga_user'); const parsed = raw ? JSON.parse(raw):null
-        if(parsed && parsed.username){ $('loginScreen').style.display='none'; $('main').style.display='block'; $('main').setAttribute('aria-hidden','false'); $('loggedUser').textContent = parsed.username; $('loggedUser').style.display='inline-block'; if(parsed.role==='professor'){ $('studentNav').style.display='none'; $('professorNav').style.display='grid'; } else { $('studentNav').style.display='grid'; $('professorNav').style.display='none'; } }
-        else { $('loginScreen').style.display='flex'; $('main').style.display='none'; }
-      }catch(e){ $('loginScreen').style.display='flex'; $('main').style.display='none' }
-
-      // logout
-      document.addEventListener('click', (ev)=>{ if(ev.target && ev.target.id === 'logoutBtnTop'){ localStorage.removeItem('siga_user'); location.reload() } })
-    });
-
-    // Expose some helpers to global for quick debugging (optional)
-    window.sigaDebug = { loadStudents, loadTurmas, students, turmas, saveStudents };
-
-  })();
-  </script>
+        function prevSlide() {
+            if (currentSlide > 1) {
+                currentSlide--;
+                showSlide(currentSlide);
+            }
+        }
+    </script>
 </body>
 </html>
