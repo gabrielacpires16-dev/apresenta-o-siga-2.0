@@ -1,0 +1,440 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>SIGA — Apresentações e Protótipos</title>
+
+  <!-- Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --accent:#c62828;
+      --accent-2:#ff5252;
+      --bg:#fff5f5;
+      --card:#fff;
+      --text:#071322;
+      --muted:#5a2a2a;
+      --maxwidth:1000px;
+    }
+    *{box-sizing:border-box}
+    body{font-family:'Poppins',Inter,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;margin:0;background:linear-gradient(180deg,var(--bg),#edf3fb);color:var(--text);-webkit-font-smoothing:antialiased}
+    header.appbar{display:flex;align-items:center;justify-content:space-between;padding:18px;max-width:var(--maxwidth);margin:18px auto}
+    header.appbar h1{margin:0;font-size:18px;color:var(--accent)}
+    .container{max-width:var(--maxwidth);margin:0 auto;padding:12px}
+    .controls{display:flex;gap:8px;align-items:center}
+    .btn{background:linear-gradient(90deg,var(--accent),var(--accent-2));color:#fff;border:0;padding:8px 12px;border-radius:8px;cursor:pointer}
+    .btn.secondary{background:linear-gradient(90deg,#7b2c2c,#a83b3b)}
+    .layout{display:flex;gap:18px}
+    nav.toc{width:240px;padding:12px;background:var(--card);border-radius:12px;box-shadow:0 8px 20px rgba(10,25,50,0.06)}
+    nav.toc ul{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:8px}
+    nav.toc a{display:block;padding:8px;border-radius:8px;text-decoration:none;color:var(--accent);font-weight:600;border:1px solid rgba(198,40,40,0.06);background:linear-gradient(180deg,#fff,#fff7f7)}
+    main.slides{flex:1}
+    section.slide{display:none;padding:18px;background:var(--card);border-radius:12px;box-shadow:0 8px 30px rgba(10,25,50,0.06);min-height:420px}
+    section.slide.active{display:block}
+    .slide h2{margin-top:0;color:var(--accent)}
+    .nav-actions{display:flex;justify-content:space-between;align-items:center;margin-top:14px;gap:8px}
+    .slide-content{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+    .card{background:#fff;border-radius:10px;padding:12px;box-shadow:0 8px 20px rgba(10,25,50,0.04)}
+    pre.wire{background:#fafafa;border-left:4px solid rgba(198,40,40,0.12);padding:12px;border-radius:8px;overflow:auto}
+    .muted{color:var(--muted);font-size:13px}
+    .mermaid{background:#fff;border-radius:10px;padding:12px;border:1px solid rgba(0,0,0,0.04)}
+    footer{max-width:var(--maxwidth);margin:18px auto;color:var(--muted);font-size:13px;text-align:center}
+    @media(max-width:900px){
+      .layout{flex-direction:column}
+      .slide-content{grid-template-columns:1fr}
+      nav.toc{width:100%}
+    }
+  </style>
+
+  <!-- mermaid -->
+  <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+  <script>
+    mermaid.initialize({startOnLoad:true});
+  </script>
+</head>
+<body>
+  <header class="appbar">
+    <h1>SIGA — Apresentações, Protótipos e Diagrama</h1>
+    <div class="controls">
+      <button id="downloadBtn" class="btn">Baixar HTML</button>
+      <a href="#etapa1" class="btn secondary">Ir para Etapa 1</a>
+    </div>
+  </header>
+
+  <div class="container layout">
+    <nav class="toc" aria-label="Índice">
+      <ul>
+        <li><a href="#etapa1" data-target="etapa1">Etapa 1 — Visão Geral</a></li>
+        <li><a href="#etapa2" data-target="etapa2">Etapa 2 — Design & Protótipos</a></li>
+        <li><a href="#etapa5" data-target="etapa5">Etapa 5 — Entrega & Roadmap</a></li>
+        <li><a href="#wireframes" data-target="wireframes">Wireframes Rápidos</a></li>
+        <li><a href="#casosdeuso" data-target="casosdeuso">Diagrama de Casos de Uso (Mermaid)</a></li>
+      </ul>
+    </nav>
+
+    <main class="slides" id="slidesMain">
+      <!-- Etapa 1 -->
+      <section id="etapa1" class="slide active" tabindex="0" aria-labelledby="etapa1-title">
+        <h2 id="etapa1-title">Etapa 1 — Visão Geral e Requisitos</h2>
+        <div class="slide-content">
+          <div class="card">
+            <h3>Objetivo do Projeto</h3>
+            <ul>
+              <li>Painel web para estudantes e professores.</li>
+              <li>Login, visualização de notas/faltas/horário, lançamentos de notas e gestão de turmas.</li>
+              <li>MVP com persistência local (localStorage).</li>
+            </ul>
+
+            <h3>Público-alvo</h3>
+            <p class="muted">Alunos (consultas) e Professores (gestão de turmas e notas).</p>
+
+            <h3>Funcionalidades (MVP)</h3>
+            <ul>
+              <li>Login demo (aluno/professor).</li>
+              <li>Navegação por tiles; seções: notas, faltas, horário, documentos, etc.</li>
+              <li>Professores: cadastrar turmas, cadastrar alunos, lançar notas com métricas.</li>
+            </ul>
+          </div>
+
+          <div class="card">
+            <h3>Critérios de Aceitação</h3>
+            <ul>
+              <li>Login funcional com credenciais demo.</li>
+              <li>Professor cria turmas e cadastra alunos (persistência local).</li>
+              <li>Lançamento de notas com métricas e chamadas gravadas.</li>
+              <li>Interface responsiva.</li>
+            </ul>
+
+            <h3>Arquitetura</h3>
+            <p class="muted">Front: HTML/CSS/Vanilla JS. Persistência: localStorage. Font: Poppins.</p>
+          </div>
+        </div>
+
+        <div class="nav-actions">
+          <div>
+            <button class="btn" data-next="etapa2">Próximo: Etapa 2</button>
+          </div>
+          <div class="muted">Slide 1 de 3</div>
+        </div>
+      </section>
+
+      <!-- Etapa 2 -->
+      <section id="etapa2" class="slide" tabindex="0" aria-labelledby="etapa2-title">
+        <h2 id="etapa2-title">Etapa 2 — Design, UI e Protótipos</h2>
+        <div class="slide-content">
+          <div class="card">
+            <h3>Objetivo</h3>
+            <p>Refinar interface, componentes reutilizáveis, garantir acessibilidade e responsividade. Fornecer protótipos para validação.</p>
+
+            <h3>Componentes-chave</h3>
+            <ul>
+              <li>Cards, Nav tiles, Forms, Badges, Buttons primário/secondary</li>
+              <li>Login overlay e listas (grid/list)</li>
+            </ul>
+          </div>
+
+          <div class="card">
+            <h3>Acessibilidade & Responsividade</h3>
+            <ul>
+              <li>Labels atrelados aos inputs, aria-live para mensagens, foco visível</li>
+              <li>Drawer / overflow para muitos tiles; testar <900px</li>
+            </ul>
+
+            <h3>Recomendações</h3>
+            <ul>
+              <li>Separar CSS/JS; criar tokens de design</li>
+              <li>Substituir alert() por toasts/modais</li>
+            </ul>
+          </div>
+
+          <div class="card" style="grid-column:1/-1">
+            <h3>Wireframes (resumo)</h3>
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px">
+              <div>
+                <strong>Login</strong>
+                <pre class="wire">[ SIGA — Acesso ]
+Usuário: [__________]
+Senha:  [__________]
+[Entrar]  [Credenciais demo]
+Dica: aluno / professor  senha: 123</pre>
+              </div>
+              <div>
+                <strong>Home (Aluno)</strong>
+                <pre class="wire">Cabeçalho: [Nome] [Tema] [Sair]
+Nav Tiles: Home | Novidades | Notas ...
+Cards de novidades e atalhos</pre>
+              </div>
+              <div>
+                <strong>Turmas (Professor)</strong>
+                <pre class="wire">[Turma Card]
+Nome da Turma
+Disciplina, Alunos, Horários
+Clique para detalhes</pre>
+              </div>
+              <div>
+                <strong>Lançar Notas</strong>
+                <pre class="wire">Aluno: [select]
+Disciplina: [select]
+Nota: [__]  [Postar]
+Tipo Métrica: [select]
+Campos do Teste: Id, Objetivo, Dados, Procedimento...</pre>
+              </div>
+              <div>
+                <strong>Lista de Chamada</strong>
+                <pre class="wire">Disciplina: [select]
+Dia: [select] Data:[date]
+[✓ Todos] [✗ Todos] [Salvar]
+[ ] Aluno A
+[ ] Aluno B</pre>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="nav-actions">
+          <div>
+            <button class="btn" data-prev="etapa1">Anterior</button>
+            <button class="btn" data-next="etapa5">Próximo: Etapa 5</button>
+          </div>
+          <div class="muted">Slide 2 de 3</div>
+        </div>
+      </section>
+
+      <!-- Etapa 5 -->
+      <section id="etapa5" class="slide" tabindex="0" aria-labelledby="etapa5-title">
+        <h2 id="etapa5-title">Etapa 5 — Entrega, Deploy e Roadmap</h2>
+        <div class="slide-content">
+          <div class="card">
+            <h3>Preparação para Deploy</h3>
+            <ul>
+              <li>Extrair index.html em index.html, styles.css, app.js</li>
+              <li>Static hosting: Vercel / Netlify / GitHub Pages</li>
+              <li>Se backend: Heroku / Render / DigitalOcean</li>
+            </ul>
+            <h3>Checklist</h3>
+            <ul>
+              <li>Separar CSS/JS; README; CHANGELOG; CI</li>
+              <li>Testes e2e (Cypress / Playwright)</li>
+            </ul>
+          </div>
+
+          <div class="card">
+            <h3>Roadmap</h3>
+            <ul>
+              <li>Autenticação real (JWT / SSO)</li>
+              <li>Backend + persistência (Postgres/Mongo)</li>
+              <li>Uploads seguros, notificações, integrações com portal acadêmico</li>
+            </ul>
+            <h3>Segurança</h3>
+            <p class="muted">HTTPS, sanitização de inputs, políticas LGPD, armazenamento seguro de arquivos (S3).</p>
+          </div>
+
+          <div class="card" style="grid-column:1/-1">
+            <h3>Artefatos adicionados</h3>
+            <ul>
+              <li>Wireframes textuais para telas-chave</li>
+              <li>Diagrama de Caso de Uso (Mermaid)</li>
+              <li>Slides em HTML (este arquivo) para apresentação</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="nav-actions">
+          <div>
+            <button class="btn" data-prev="etapa2">Anterior</button>
+            <button class="btn secondary" data-target="wireframes">Ir para Wireframes</button>
+          </div>
+          <div class="muted">Slide 3 de 3</div>
+        </div>
+      </section>
+
+      <!-- Wireframes detalhados -->
+      <section id="wireframes" class="slide" tabindex="0" aria-labelledby="wireframes-title">
+        <h2 id="wireframes-title">Wireframes — Telas detalhadas</h2>
+
+        <div class="slide-content">
+          <div class="card">
+            <h3>Tela de Login</h3>
+            <p class="muted">Cartão centralizado com dicas de credenciais e ação de demo.</p>
+            <pre class="wire">
++--------------------------------------------+
+|  📕 SIGA — Acesso                           |
+|                                            |
+|  Usuário: [_____________]                  |
+|  Senha:  [_____________]                   |
+|                                            |
+|  [Entrar]   [Credenciais de demo]          |
+|                                            |
+|  Dica: usuário 'aluno' ou 'professor'      |
++--------------------------------------------+
+            </pre>
+          </div>
+
+          <div class="card">
+            <h3>Home / Novidades</h3>
+            <p class="muted">Cards com ícone, título, data e descrição; hover com leve movimento.</p>
+            <pre class="wire">
+[Card] 🎤 Semana de Tecnologia - 24/11/2025
+  Palestras, workshops, local: Auditório
+[Card] 📚 Pré-Inscrição em Optativas - 20/11/2025
+  Inscrições até 25/11
+            </pre>
+          </div>
+
+          <div class="card">
+            <h3>Turmas (Professor)</h3>
+            <pre class="wire">
+[Card] Algoritmos - Turma A
+  Disciplina: Algoritmos
+  Alunos: 20
+  Horários: Seg 08:00-10:00, Qua 08:00-10:00
+[Card] Banco de Dados - Turma B
+  Disciplina: BD
+  Alunos: 18
+  Horários: Ter 10:00-12:00
+            </pre>
+          </div>
+
+          <div class="card" style="grid-column:1/-1">
+            <h3>Cadastrar Turma (exemplo)</h3>
+            <pre class="wire">
+Nome da Turma: [___________________]
+Disciplina:     [___________________]
+Semestre:       [__]
+Horários:
+  - Dia: [__] Horário: [__] Sala: [__] [Remover]
+[+ Adicionar Horário]
+[ Criar Turma ]
+            </pre>
+          </div>
+        </div>
+
+        <div class="nav-actions">
+          <div>
+            <button class="btn" data-prev="etapa5">Voltar</button>
+            <button class="btn" data-target="casosdeuso">Ver Diagrama de Caso de Uso</button>
+          </div>
+          <div class="muted">Wireframes</div>
+        </div>
+      </section>
+
+      <!-- Diagrama Mermaid -->
+      <section id="casosdeuso" class="slide" tabindex="0" aria-labelledby="casos-title">
+        <h2 id="casos-title">Diagrama de Casos de Uso</h2>
+
+        <div class="slide-content" style="grid-template-columns:1fr">
+          <div class="card">
+            <p class="muted">O diagrama abaixo descreve atores e casos de uso principais do SIGA.</p>
+
+            <div class="mermaid">
+%% Diagrama de Caso de Uso - SIGA
+%% Atores: Aluno, Professor, Sistema
+actor Aluno as A
+actor Professor as P
+rectangle SIGA {
+  A -- (Login)
+  P -- (Login)
+
+  A -- (Ver Novidades)
+  A -- (Consultar Notas)
+  A -- (Consultar Faltas)
+  A -- (Consultar Horário)
+  A -- (Enviar Solicitação) 
+  A -- (Download Documentos)
+
+  P -- (Cadastrar Turma)
+  P -- (Cadastrar Aluno)
+  P -- (Lançar Notas)
+  P -- (Registrar Justificativa de Falta)
+  P -- (Realizar Chamada)
+  P -- (Gerenciar Solicitações)
+}
+(Sistema) as S
+S ..> (Persistir em localStorage)
+            </div>
+
+            <p class="muted" style="margin-top:12px">Observação: renderização do mermaid é feita via CDN.</p>
+          </div>
+        </div>
+
+        <div class="nav-actions">
+          <div>
+            <button class="btn" data-prev="wireframes">Voltar</button>
+            <button class="btn" data-target="etapa1">Ir para Início</button>
+          </div>
+          <div class="muted">Diagrama</div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <footer>
+    Arquivo gerado por assistente — contém apresentações (Etapas 1,2,5), wireframes textuais e diagrama Mermaid.
+  </footer>
+
+  <script>
+    // Navegação entre seções por links e botões
+    document.querySelectorAll('nav.toc a, button[data-target]').forEach(el => {
+      el.addEventListener('click', (e) => {
+        e.preventDefault();
+        const target = el.dataset.target || el.getAttribute('href').substring(1);
+        showSection(target);
+        location.hash = target;
+      });
+    });
+
+    document.querySelectorAll('button[data-next]').forEach(b => {
+      b.addEventListener('click', () => showSection(b.dataset.next));
+    });
+    document.querySelectorAll('button[data-prev]').forEach(b => {
+      b.addEventListener('click', () => showSection(b.dataset.prev));
+    });
+
+    function showSection(id){
+      document.querySelectorAll('section.slide').forEach(s => s.classList.remove('active'));
+      const el = document.getElementById(id);
+      if(el) {
+        el.classList.add('active');
+        el.scrollIntoView({behavior:'smooth',block:'center'});
+        try{ if(window.mermaid) mermaid.init(undefined, el.querySelectorAll('.mermaid')) }catch(e){}
+      }
+    }
+
+    // Hash navigation on load
+    window.addEventListener('load', () => {
+      const hash = location.hash.replace('#','');
+      if(hash) showSection(hash);
+    });
+
+    // Download current HTML
+    document.getElementById('downloadBtn').addEventListener('click', () => {
+      const html = '<!doctype html>\\n' + document.documentElement.outerHTML;
+      const blob = new Blob([html], {type: 'text/html'});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'siga-apresentacao.html';
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+    });
+
+    // Keyboard navigation: Left/Right arrows
+    window.addEventListener('keydown', (e) => {
+      const sections = Array.from(document.querySelectorAll('section.slide'));
+      const activeIndex = sections.findIndex(s => s.classList.contains('active'));
+      if(e.key === 'ArrowRight'){
+        const next = sections[activeIndex+1] || sections[0];
+        showSection(next.id);
+      } else if(e.key === 'ArrowLeft'){
+        const prev = sections[activeIndex-1] || sections[sections.length-1];
+        showSection(prev.id);
+      }
+    });
+  </script>
+</body>
+</html>
